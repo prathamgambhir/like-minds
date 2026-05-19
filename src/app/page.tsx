@@ -1,9 +1,10 @@
+import { Button } from "@/components/ui/button";
 import { PricingTable } from "@clerk/nextjs";
 
 export default function Home() {
   return (
     <div>
-          <h1>Hello World</h1>
+          <Button>Hello World</Button>
           <PricingTable/>
     </div>
   );

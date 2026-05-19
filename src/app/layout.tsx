@@ -6,8 +6,11 @@ import {
   SignUpButton,
   UserButton,
 } from "@clerk/nextjs";
-import { Outfit } from "next/font/google";
+import { Outfit, Geist } from "next/font/google";
 import "./globals.css";
+import { cn } from "@/lib/utils";
+
+const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 const outfitFont = Outfit({
   subsets: ["latin"],
@@ -26,7 +29,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${outfitFont.className} h-full antialiased`}>
+    <html lang="en" className={cn("h-full", "antialiased", outfitFont.className, "font-sans", geist.variable)}>
       <body className="min-h-full flex flex-col">
         <ClerkProvider>
           <header className="flex justify-end items-center p-4 gap-4 h-16">
