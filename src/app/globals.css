@@ -249,4 +249,8 @@
   .normal-button {
     @apply h-8 w-24;
   }
+
+  .nav-link {
+    @apply text-sm font-medium text-zinc-600 hover:text-zinc-900 transition-colors px-3 py-2 rounded-md
+  }
 }

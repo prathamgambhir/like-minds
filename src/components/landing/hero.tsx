@@ -78,18 +78,18 @@ export default function HeroPage() {
                         {/* CTAs */}
                         <div className="flex flex-wrap gap-4 mb-10 w-full sm:w-auto">
                             <Link href="/sign-up" className="w-full sm:w-auto">
-                                <Button className="w-full sm:w-auto bg-zinc-900 hover:bg-zinc-800 text-white font-medium px-6 py-5 h-auto rounded-xl shadow-lg shadow-zinc-900/10 flex items-center justify-center gap-2 group transition-all duration-200 hover:translate-y-[-1px]">
+                                <Button className="w-full sm:w-auto bg-zinc-900 hover:bg-zinc-800 text-white font-medium px-6 py-5 h-auto rounded-xl shadow-lg shadow-zinc-900/10 flex items-center justify-center gap-2 group transition-all duration-200 hover:-translate-y-px">
                                     Join LikeMinds Free
                                     <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                                 </Button>
                             </Link>
-                            <button
+                            <Button
                                 onClick={triggerMatchingDemo}
-                                className="w-full sm:w-auto flex items-center justify-center gap-2 border border-zinc-200 bg-white hover:bg-zinc-50 text-zinc-800 font-medium px-6 py-5 h-auto rounded-xl transition-all duration-200"
+                                className="w-full sm:w-auto flex items-center justify-center gap-2 border border-zinc-200 bg-white hover:bg-zinc-50 text-zinc-800 font-medium px-6 py-5 h-auto rounded-xl transition-all duration-200 hover:-translate-y-px"
                             >
                                 <Play className="h-3.5 w-3.5 fill-current text-zinc-600" />
                                 <span>Test Match AI</span>
-                            </button>
+                            </Button>
                         </div>
 
                         {/* Key Value Props */}
