@@ -1,11 +1,9 @@
-import { Button } from "@/components/ui/button";
-import { PricingTable } from "@clerk/nextjs";
+import HeroPage from "@/components/landing/hero";
 
 export default function Home() {
   return (
-    <div>
-          <Button>Hello World</Button>
-          <PricingTable/>
+    <div className="conatiner-layout">
+          <HeroPage />
     </div>
   );
 }
