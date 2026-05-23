@@ -54,8 +54,7 @@ export default function HeroPage() {
                         {/* Pill Badge */}
                         <div className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium bg-zinc-100 text-zinc-800 border border-zinc-200/60 mb-6 hover:bg-zinc-200/50 transition-colors cursor-pointer" onClick={triggerMatchingDemo}>
                             <Sparkles className="h-3.5 w-3.5 text-sky-600 animate-pulse" />
-                            <span>AI-Powered Matching v2.0 Live</span>
-                            <ArrowRight className="h-3 w-3 text-zinc-500" />
+                            <span>AI-Powered Matching</span>
                         </div>
 
                         {/* Main Headline */}
