@@ -23,19 +23,40 @@ export default function Navbar({ isPro }: { isPro: boolean }) {
           <Link href={"/"}>LikeMinds</Link>
         </div>
         {/* Links */}
-        {isSignedIn && (
-          <nav className="flex items-center justify-center gap-3">
-            <Link href={"/dashboard"}>
-              <Button variant={"ghost"}>Dashboard</Button>
-            </Link>
-            <Link href={"/communities"}>
-              <Button variant={"ghost"}>Communities</Button>
-            </Link>
-            <Link href={"/chat"}>
-              <Button variant={"ghost"}>Chat</Button>
-            </Link>
-          </nav>
-        )}
+        <nav className="hidden md:flex items-center justify-center gap-2">
+          {isSignedIn ? (
+            <>
+              <Link href={"/dashboard"} className="nav-link">
+                Dashboard
+              </Link>
+              <Link href={"/communities"} className="nav-link">
+                Communities
+              </Link>
+              <Link href={"/chat"} className="nav-link">
+                Chat
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link href="#features" className="nav-link">
+                Features
+              </Link>
+              <Link href="#how-it-works" className="nav-link">
+                How it Works
+              </Link>
+              <Link href="#testimonials" className="nav-link">
+                Testimonials
+              </Link>
+              <Link href="#pricing" className="nav-link">
+                Pricing
+              </Link>
+              <Link href="#faqs" className="nav-link">
+                FAQs
+              </Link>
+            </>
+          )}
+        </nav>
+
         {/* Auth Buttons */}
         <div>
           {isSignedIn ? (
@@ -49,18 +70,18 @@ export default function Navbar({ isPro }: { isPro: boolean }) {
                   <TrophyIcon /> Free
                 </Badge>
               )}
-              <UserButton 
+              <UserButton
                 appearance={{
-                  elements: {
-                    
-                  },
+                  elements: {},
                 }}
               />
             </div>
           ) : (
             <div className="flex justify-center items-center gap-3">
               <Link href={"/sign-in"}>
-                <Button variant={"outline"} className="normal-button">SignIn</Button>
+                <Button variant={"outline"} className="normal-button">
+                  SignIn
+                </Button>
               </Link>
               <Link href={"/sign-up"}>
                 <Button className="normal-button">SignUp</Button>
