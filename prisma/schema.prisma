@@ -1,0 +1,142 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id               String            @id @default(uuid()) @db.Uuid
+  clerkId          String            @unique @map("clerk_id")
+  email            String
+  name             String
+  imageUrl         String?           @map("image_url")
+  subscriptionTier String            @default("free") @map("subscription_tier")
+  createdAt        DateTime          @default(now()) @map("created_at")
+  updatedAt        DateTime          @default(now()) @updatedAt @map("updated_at")
+
+  // Explicit Relations
+  createdCommunities Communities[]     @relation("CommunityCreator")
+  memberships        CommunityMember[]
+  learningGoals      LearningGoal[]
+  sentMessages       Message[]
+  matchesAsUser1     Match[]           @relation("User1Matches")
+  matchesAsUser2     Match[]           @relation("User2Matches")
+
+  @@map("users")
+}
+
+model Communities {
+  id            String            @id @default(uuid()) @db.Uuid
+  name          String
+  description   String?
+  imageUrl      String?           @map("image_url")
+  createdById   String?           @map("created_by_id") @db.Uuid
+  createdAt     DateTime          @default(now()) @map("created_at")
+  updatedAt     DateTime          @default(now()) @updatedAt @map("updated_at")
+
+  // Relations
+  createdBy     User?             @relation("CommunityCreator", fields: [createdById], references: [id])
+  members       CommunityMember[]
+  learningGoals LearningGoal[]
+  matches       Match[]
+
+  @@map("communities")
+}
+
+model CommunityMember {
+  id          String   @id @default(uuid()) @db.Uuid
+  userId      String   @map("user_id") @db.Uuid
+  communityId String   @map("community_id") @db.Uuid
+  joinedAt    DateTime @default(now()) @map("joined_at")
+
+  // Relations
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  community Communities @relation(fields: [communityId], references: [id], onDelete: Cascade)
+
+  @@map("community_members")
+}
+
+model LearningGoal {
+  id          String   @id @default(uuid()) @db.Uuid
+  userId      String   @map("user_id") @db.Uuid
+  communityId String   @map("community_id") @db.Uuid
+  title       String
+  description String?
+  tags        Json     @default("[]")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @default(now()) @updatedAt @map("updated_at")
+
+  // Relations
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  community Communities @relation(fields: [communityId], references: [id], onDelete: Cascade)
+
+  @@map("learning_goals")
+}
+
+model Match {
+  id          String   @id @default(uuid()) @db.Uuid
+  user1Id     String   @map("user1_id") @db.Uuid
+  user2Id     String   @map("user2_id") @db.Uuid
+  communityId String   @map("community_id") @db.Uuid
+  status      String   @default("pending")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  // Relations
+  user1         User           @relation("User1Matches", fields: [user1Id], references: [id])
+  user2         User           @relation("User2Matches", fields: [user2Id], references: [id])
+  community     Communities    @relation(fields: [communityId], references: [id], onDelete: Cascade)
+  conversations Conversation[]
+
+  @@map("matches")
+}
+
+model Conversation {
+  id            String   @id @default(uuid()) @db.Uuid
+  matchId       String   @map("match_id") @db.Uuid
+  lastMessageAt DateTime? @map("last_message_at")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  // Relations
+  match     Match                  @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  messages  Message[]
+  summaries ConversationSummary[]
+
+  @@map("conversations")
+}
+
+model Message {
+  id             String   @id @default(uuid()) @db.Uuid
+  conversationId String   @map("conversation_id") @db.Uuid
+  senderId       String   @map("sender_id") @db.Uuid
+  content        String
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  // Relations
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  sender       User         @relation(fields: [senderId], references: [id], onDelete: Cascade)
+
+  @@map("messages")
+}
+
+model ConversationSummary {
+  id             String   @id @default(uuid()) @db.Uuid
+  conversationId String   @map("conversation_id") @db.Uuid
+  summary        String
+  actionItems    Json     @default("[]") @map("action_items")
+  keyPoints      Json     @default("[]") @map("key_points")
+  nextSteps      Json     @default("[]") @map("next_steps")
+  generatedAt    DateTime @default(now()) @map("generated_at")
+
+  // Relations
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  @@map("conversation_summaries")
+}
