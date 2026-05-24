@@ -13,14 +13,14 @@ datasource db {
 }
 
 model User {
-  id               String            @id @default(uuid()) @db.Uuid
-  clerkId          String            @unique @map("clerk_id")
+  id               String   @id @default(uuid()) @db.Uuid
+  clerkId          String   @unique @map("clerk_id")
   email            String
   name             String
-  imageUrl         String?           @map("image_url")
-  subscriptionTier String            @default("free") @map("subscription_tier")
-  createdAt        DateTime          @default(now()) @map("created_at")
-  updatedAt        DateTime          @default(now()) @updatedAt @map("updated_at")
+  imageUrl         String?  @map("image_url")
+  subscriptionTier String   @default("free") @map("subscription_tier")
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @default(now()) @updatedAt @map("updated_at")
 
   // Explicit Relations
   createdCommunities Communities[]     @relation("CommunityCreator")
@@ -34,13 +34,13 @@ model User {
 }
 
 model Communities {
-  id            String            @id @default(uuid()) @db.Uuid
-  name          String
-  description   String?
-  imageUrl      String?           @map("image_url")
-  createdById   String?           @map("created_by_id") @db.Uuid
-  createdAt     DateTime          @default(now()) @map("created_at")
-  updatedAt     DateTime          @default(now()) @updatedAt @map("updated_at")
+  id          String   @id @default(uuid()) @db.Uuid
+  name        String
+  description String?
+  imageUrl    String?  @map("image_url")
+  createdById String?  @map("created_by_id") @db.Uuid
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @default(now()) @updatedAt @map("updated_at")
 
   // Relations
   createdBy     User?             @relation("CommunityCreator", fields: [createdById], references: [id])
@@ -99,13 +99,13 @@ model Match {
 }
 
 model Conversation {
-  id            String   @id @default(uuid()) @db.Uuid
-  matchId       String   @map("match_id") @db.Uuid
+  id            String    @id @default(uuid()) @db.Uuid
+  matchId       String    @map("match_id") @db.Uuid
   lastMessageAt DateTime? @map("last_message_at")
-  createdAt     DateTime @default(now()) @map("created_at")
+  createdAt     DateTime  @default(now()) @map("created_at")
 
   // Relations
-  match     Match                  @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  match     Match                 @relation(fields: [matchId], references: [id], onDelete: Cascade)
   messages  Message[]
   summaries ConversationSummary[]
 
