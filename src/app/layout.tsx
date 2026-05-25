@@ -4,6 +4,8 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import { ClerkProvider } from "@clerk/nextjs";
 import NavbarWrapper from "@/components/layout/navbar-wrapper";
+import FooterSection from "@/components/landing/footer";
+import QueryProvider from "@/providers/query-provider";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -36,8 +38,11 @@ export default function RootLayout({
         )}
       >
         <body className="min-h-full flex flex-col">
-          <NavbarWrapper />
-          {children}
+          <QueryProvider>
+            <NavbarWrapper />
+              {children}
+            <FooterSection />
+          </QueryProvider>
         </body>
       </html>
     </ClerkProvider>

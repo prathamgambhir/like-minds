@@ -21,7 +21,6 @@ export default function Home() {
       <PricingSection />
       <FAQsSection />
       <CTASection />
-      <FooterSection />
     </main>
   );
 }
