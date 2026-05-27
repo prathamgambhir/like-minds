@@ -15,7 +15,7 @@ datasource db {
 model User {
   id               String   @id @default(uuid()) @db.Uuid
   clerkId          String   @unique @map("clerk_id")
-  email            String
+  email            String   @unique
   name             String
   imageUrl         String?  @map("image_url")
   subscriptionTier String   @default("free") @map("subscription_tier")
