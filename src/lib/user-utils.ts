@@ -15,7 +15,7 @@ const createUserByClerkId = async (clerkUser: User) => {
 }
 
 export const getOrCreateUserByClerkId = async (clerkId: string) => {
-    let user = await prisma.user.findUnique({
+    let user = await prisma.user.findFirst({
         where: {
             clerkId: clerkId
         }
