@@ -1,12 +1,16 @@
 import { Hono } from "hono";
 import { authMiddleware } from "./middleware/auth-middleware";
 import prisma from "@/lib/db";
+import { getOrCreateUserByClerkId } from "@/lib/user-utils";
 
 type Variables = {
     userId: string
+    user: NonNullable<Awaited<ReturnType<typeof getOrCreateUserByClerkId>>>
 }
 
-const communitiesApp = new Hono<{Variables: Variables}>()
+const app = new Hono<{Variables: Variables}>();
+
+const communitiesApp = app
     .use("/*", authMiddleware)
     .get("/all", async(c) => {
         const allCommunities = await prisma.communities.findMany()
@@ -35,6 +39,22 @@ const communitiesApp = new Hono<{Variables: Variables}>()
         return c.json({
             success: true,
             userCommunities
+        })
+    })
+    .get("/:communityId/goals", async (c) => {
+        const user = c.get("user");
+        const communityId = c.req.param("communityId");
+
+        const goals = await prisma.learningGoal.findMany({
+            where: {
+                communityId: communityId,
+                userId: user.id
+            }
+        })
+
+        return c.json({
+            success: true,
+            goals
         })
     })
 
