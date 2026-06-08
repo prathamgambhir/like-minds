@@ -1,3 +1,6 @@
+import { communitiesApp } from '@/app/server/communities-route';
+import { userApp } from '@/app/server/user-route';
+import { getOrCreateUserByClerkId } from '@/lib/user-utils';
 import { auth } from '@clerk/nextjs/server';
 import { Hono } from 'hono';
 import { HTTPException } from 'hono/http-exception';
@@ -5,6 +8,7 @@ import { handle } from "hono/vercel";
 
 type Variables = {
     userId: string;
+    user: NonNullable<Awaited<ReturnType<typeof getOrCreateUserByClerkId>>>
 }
 
 const app = new Hono<{ Variables: Variables }>().basePath("/api");
@@ -47,7 +51,10 @@ app.use("/*", async(c, next) => {
     await next();
 })
 
-const routes = app.route("/communities", communitiesRoute)
+const routes = app
+    .route("/communities", communitiesApp)
+    .route("/user", userApp)
+
 
 export type AppType = typeof routes;
 
