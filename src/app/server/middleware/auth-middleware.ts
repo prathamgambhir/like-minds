@@ -12,7 +12,7 @@ export const authMiddleware = async (c: Context<{Variables: AuthVariables}>, nex
     const user = await getOrCreateUserByClerkId(clerkId);
 
     if(!user){
-        return new HTTPException(404, {message: "User not found"})
+        throw new HTTPException(404, {message: "User not found"})
     }
 
     c.set("user", user);
