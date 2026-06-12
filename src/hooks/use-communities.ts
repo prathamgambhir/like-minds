@@ -1,5 +1,5 @@
 import { client } from "@/lib/app-client";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const useCommunities = () => {
   return useQuery({
@@ -33,10 +33,9 @@ export const useAllCommunities = () => {
 };
 
 export const useCommunityGoals = (communityId: string | null) => {
-  console.log("fetchhhhhh")
-
   return useQuery({
-    queryKey: ["communityGoals"],
+    queryKey: ["communityGoals", communityId],
+    enabled: !!communityId,
     queryFn: async () => {
       const res = await client.api.communities[":communityId"].goals.$get({
         param: {
@@ -45,7 +44,7 @@ export const useCommunityGoals = (communityId: string | null) => {
       });
 
       if (!res.ok) {
-        throw new Error("Failed to fetch all communities");
+        throw new Error("Failed to fetch community goals");
       }
 
       const data = await res.json();
@@ -53,3 +52,29 @@ export const useCommunityGoals = (communityId: string | null) => {
     },
   });
 };
+
+
+export const useJoinCommunity = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (communityId: string) => {
+      const res = await client.api.communities[":communityId"].join.$post({
+        param: {
+          communityId: communityId
+        }
+      })
+
+      if(!res.ok){
+        throw new Error("Failed to join community");
+      }
+
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({queryKey: ["communities"]})
+    },
+    onError: (error) => {
+      console.error("Error joining community", error);
+    }
+  })
+}
